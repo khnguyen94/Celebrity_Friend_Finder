@@ -24,16 +24,21 @@
 
         <br />
 
-        <form>
+        <form method="POST" role="form">
           <!-- Ask for basic user data -->
           <h3>Tell us a bit about yourself.</h3>
+
+          <div class="form-group">
+            <label for="userNameInput">Name</label>
+            <input type="text" class="form-control" id="userNameInput">
+          </div>
 
           <div class="form-group">
             <label for="userEmailInput"> Email Address </label>
             <input
               type="email"
               class="form-control"
-              id="exampleInputEmail1"
+              id="userEmailInput"
               aria-describedby="emailHelp"
               placeholder="Enter email"
             />
@@ -48,8 +53,8 @@
             </label>
             <textarea
               class="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
+              id="userImageLinkInput"
+              rows="1"
             ></textarea>
           </div>
         </form>
@@ -60,7 +65,7 @@
         <div class="form-group">
           <h5>Question 1</h5>
           <label for="question1">You are self-asborbed.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q1">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -72,7 +77,7 @@
         <div class="form-group">
           <h5>Question 2</h5>
           <label for="question2">You care about your physical appearance.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q2">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -84,7 +89,7 @@
         <div class="form-group">
           <h5>Question 3</h5>
           <label for="question3">You think you have an impeccable sense of humor.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q3">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -96,7 +101,7 @@
         <div class="form-group">
           <h5>Question 4</h5>
           <label for="question4">You are entreprenurial.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q4">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -108,7 +113,7 @@
         <div class="form-group">
           <h5>Question 5</h5>
           <label for="question5">You are vain.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q5">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -120,7 +125,7 @@
         <div class="form-group">
           <h5>Question 6</h5>
           <label for="question6">You spend a lot of time in the limelight.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q6">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -132,7 +137,7 @@
         <div class="form-group">
           <h5>Question 7</h5>
           <label for="question7">You are humble about your accomplishments.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q7">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -144,7 +149,7 @@
         <div class="form-group">
           <h5>Question 8</h5>
           <label for="question8">You are musically gifted.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q8">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -156,7 +161,7 @@
         <div class="form-group">
           <h5>Question 9</h5>
           <label for="question9">You have a knack for theatre and acting.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q9">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -168,7 +173,7 @@
         <div class="form-group">
           <h5>Question 10</h5>
           <label for="question10">Money is everything in life.</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="q10">
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -180,11 +185,36 @@
         <br />
 
         <!-- Submit button -->
-        <a class="btn btn-primary btn-lg" href="#"> Submit </a>
+        <div>
+          <button type="submit" id="submit-survey-button" class="btn btn-primary btn-lg"> Submit Survey </button>
+        </div>
       </div>
     </div>
 
-    <!-- Link CSS Reset -->
+    <!-- JS logic to handle submit data -->
+    <script type="text/javascript">
+      // Create on-click logic for submit button
+      $("#submit-survey-button").on("click", function(event) {
+        // Prevent refresh
+        event.preventDefault();
+
+        // Create a new character with properties: name, email, image link, and an array of survey scores
+        var newCharacter = {
+          name: $("#name").val().trim(),
+          email: $("#role").val().trim(),
+          image: $("#age").val().trim(),
+          scores: $("#force-points").val().trim()
+        };
+  
+        // Question: What does this code do??
+        $.post("/api/characters", newCharacter)
+          .then(function(data) {
+            console.log("add.html", data);
+            alert("Adding character...");
+          });
+      });
+    </script>
+    
     <!-- Link CSS Reset -->
     <!-- Link CSS Reset -->
   </body>

@@ -5,7 +5,12 @@ var path = require("path");
 
 // Create a route to the homepage
 app.get("/", function(req, res) {
-  res.sendFile();
+  res.sendFile(path.join(__dirname, "../public/home.html"));
+});
+
+// Create a route to the survey page
+app.get("/survey", function(req, res) {
+  res.sendFile(path.join(__dirname, "../public/survey.html"));
 });
 
 // Create a route to display a matched celeb
@@ -28,12 +33,9 @@ app.get("/:celeb", function(req, res) {
   calculateCelebScores(celebs);
 
   // Create function that will match userSurveyScore with a value from the celebSurveyScoreArray
-
-  res.sendFile(path.join(__dirname, "../public/home.html"));
+  
 });
 
-app.get("/survey", function(req, res) {
-  res.sendFile(path.join(__dirname, "../public/survey.html"));
-});
+
 
 module.exports = allHTMLRoutes;
