@@ -217,124 +217,70 @@
       </div>
     </div>
 
-    <!-- JS logic to handle submit data -->
-    <script type="text/javascript">
-      // Create on-click logic for submit button
-      $("#submit-survey-button").on("click", function(event) {
-        // Prevent refresh
-        event.preventDefault();
-
-        // At the end, run grabUserScores(userSurveyAnswers)
-
-        // Create an array to hold the user info answers
-        var userInfoAnswers = [];
-
-        // Create an array to hold the user survey answers
-        var userSurveyAnswers = [];
-
-        // Create a function that grabs all the userInfoAnswers
-        function grabUserInfo(userInfoArr, userScoresArr) {
-          // Check that all the user info fields are filled out
-          if (
-            !$("#userNameInput").val() ||
-            !$("#userEmailInput").val() ||
-            !$("#userImageLinkInput").val()
-          ) {
-            console.log(
-              "Basic information incomplete! Please fill out completely!"
-            );
-          }
-
-          // Push all 3 user info datapoints into infoArr
-          userInfoArr.push($("#userNameInput").val().trim());
-          userInfoArr.push($("#userEmailInput").val().trim());
-          userInfoArr.push($("#userImageLinkInput").val().trim());
-
-          // Run grabUserScores
-          grabUserScores(userInfoArr, userScoresArr);
-        }
-
-        // Create a function that grab all the values the user inputed in the html and push to this array, should be 10 values total
-        function grabUserScores(userInfoArr, userScoresArr) {
-          // Use a for loop to push all the user survey question field values to the userScoresArr
-          for (var i = 1; i < 11; i++) {
-            // Get a jquery handle on the current html form value
-            var questionAnswer = $("#q" + i);
-
-            // Push value to the userScoresArr
-            userScoresArr.push(questionAnswer);
-          }
-
-          console.log(
-            "Successfully pushed " +
-              userScoresArr.length() +
-              " items into userScoresArr"
-          );
-
-          // Check that all the user survey question fields are filled out
-          if (userScoresArr.includes(0)) {
-            console.log("You have not answered a question");
-          }
-
-          // Check both arrays and their values
-          console.log(userInfoArr);
-          console.log(userScoresArr);
-
-          // Run the createProfile function, pass through these two arrays
-          createNewProfile(userInfoArr, userScoresArr);
-        };
-
-        // Create a function that creates a new profile based on the information
-        function createNewProfile(userInfoArr, userScoresArr) {
-          // call on the Profile construtor to create a new profile 
-          var newProfile = new Profile(userInfoArr[0], userInfoArr[1], userInfoArr[2], userScoresArr);
-
-          return newProfile;
-        };
-
-        // Post the new character to the server
-        $.post("/api/friends", newProfile)
-        .then(function(data) {
-          console.log("survey.html", data);
-          alert("Adding profile...");
-        });
-
-
-        // Create a constructor function for newProfile
-        function Profile(name, email, image, scores) {
-          this.name = name;
-          this.email = email; 
-          this.image = image; 
-          this.scores = scores;
-        };
-
-
-
-        // Create a new character with properties: name, email, image link, and an array of survey scores
-        var newCharacter = {
-          name: $("#name")
-            .val()
-            .trim(),
-          email: $("#role")
-            .val()
-            .trim(),
-          image: $("#age")
-            .val()
-            .trim(),
-          scores: $("#force-points")
-            .val()
-            .trim()
-        };
-
-        // Question: What does this code do??
-        $.post("/api/characters", newCharacter).then(function(data) {
-          console.log("add.html", data);
-          alert("Adding character...");
-        });
-      });
-    </script>
-
-    <!-- Link CSS Reset -->
-    <!-- Link CSS Reset -->
+    <!-- Link JQuery -->
+    <script src="https://code.jquery.com/jquery.js"></script>
   </body>
 </html>
+
+<!-- JS logic to handle submit data -->
+<script type="text/javascript">
+  // Create on-click logic for submit button
+  $("#submit-survey-button").on("click", function(event) {
+    // Prevent refresh
+    event.preventDefault();
+
+    if (!$(".form-control")) {
+      alert("There are empty fields of the form!");
+    }
+    else {
+
+    // Grabs all the inputs and creates an object using all of these inputs
+    // Grab the name of the new Friend
+    newFriendName = $("#userNameInput")
+      .val()
+      .trim();
+
+    // Create a route name from this name for the new Friend
+    newFriendRouteName = newFriendName.replace(/\s+/g, "").toLowerCase();
+
+    // Create an empty array to hold new Friend survey answers
+    var userSurveyAnswers = [];
+
+    // Use a for loop to push all the user survey question field values to the userScoresArr
+    for (var i = 1; i < 11; i++) {
+      // Get a jquery handle on the current html form value
+      var questionAnswer = $("#q" + i)
+        .val()
+        .trim();
+
+      // Push value to the userScoresArr
+      userSurveyAnswers.push(questionAnswer);
+    }
+
+    // Check both score
+    // console.log(userSurveyAnswers);
+
+    // Grab the rest of the form elements to be used in creating a new user
+    var newFriend = {
+      routeName: newFriendRouteName,
+      name: newFriendName,
+      email: $("#userImageEmailLinkInput")
+        .val(),
+      photo: $("#userImageLinkInput")
+        .val(),
+      type: "friend",
+      scores: userSurveyAnswers
+    };
+
+    console.log(newFriend);
+
+    // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
+    // The callback is the response of the server. In our case, we set up code in api-routes that "returns" a match celeb to that new Friend's data
+    $.post("/api/survey", newFriend, function(data) {
+      //
+      // Clear the form after submission
+    });
+    }
+
+  });
+</script>

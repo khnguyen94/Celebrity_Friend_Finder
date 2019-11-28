@@ -6,7 +6,7 @@ var apiRoutes = require("./app/routing/apiRoutes");
 
 // Set up the Express App
 var app = express();   /// this is an object
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Set up the Express App to handle data parsing
 app.use(express.urlencoded({ extended: true }));
