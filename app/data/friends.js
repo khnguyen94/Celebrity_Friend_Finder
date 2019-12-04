@@ -10,7 +10,7 @@ var friends = [
   {
     routeName: "kanyewest",
     name: "Kanye West",
-    photo: "#",
+    photo: "https://pmcdeadline2.files.wordpress.com/2019/11/shutterstock_editorial_10467948bp.jpg?w=681&h=383&crop=1",
     type: "celebrity",
     scores: [5, 1, 1, 1, 1, 1, 2, 5, 4, 1]
   },

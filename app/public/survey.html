@@ -7,6 +7,19 @@
     <title>Document</title>
 
     <!-- Link CSS Reset -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <!-- Link JQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
     <!-- Link Bootstrap CDN -->
     <link
       rel="stylesheet"
@@ -15,6 +28,7 @@
       crossorigin="anonymous"
     />
     <!-- Link Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
   </head>
 
   <body>
@@ -218,40 +232,46 @@
     </div>
 
     <!-- Modal -->
-    <div id="modal-div">
-      <div class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">You've Matched with A Celeb! - <span id="matched-name-display"></span></h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p id="matched-info-display"></p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
+    <div
+      id="matched-modal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              You've Matched with A Celeb! -
+              <span id="matched-name-display"></span>
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img id="matched-photo-display" src="" alt=""/>
+            <p id="matched-info-display">Compatibility Score:</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Link JQuery -->
-    <script src="https://code.jquery.com/jquery.js"></script>
   </body>
 </html>
 
@@ -267,7 +287,7 @@
       url: "/api/friends",
       method: "GET"
     }).then(function(data) {
-      console.log(data);
+      // console.log(data);
       // Assign the data to the celebs array
       celebArr = data;
     });
@@ -335,7 +355,7 @@
 
           // Clear the form after submitting
           $("#userNameInput").val("");
-          $("#userImageEmailLinkInput").val("");
+          $("#userEmailInput").val("");
           $("#userImageLinkInput").val("");
           $("#q1").val("");
           $("#q2").val("");
@@ -444,7 +464,10 @@
         console.log("sumDiffArr");
         console.log(sumDiffArr);
 
-        // Create a variable to hold lowest index
+        // Create a variable to hold lowest sum
+        var lowestSum;
+
+        // Create a variable to hold lowest sum's index
         var lowestSumIndex;
 
         // Create a function that gets the index of of the lowest difference in sumDiffArr
@@ -478,6 +501,7 @@
 
         console.log("matchedCelebFriend");
         console.log(matchedCelebFriend);
+        console.log(matchedCelebFriend.photo);
 
         // Create a new variable to hold matchedCelebFriend's name
         var matchCelebName;
@@ -485,25 +509,25 @@
         // Set it
         matchCelebName = matchedCelebFriend.routeName;
 
-        console.log(matchCelebName);
+        // console.log(matchCelebName);
 
-        // Render the modal with all the information
+        // Create a function to render the modal with all the information
+        function renderModal(matchedCeleb) {
+          // Display the modal
+          $("#matched-modal").modal("show");
 
-        $.get("/api/characters/" + searchedCharacter, function(data) {
-          console.log(data);
-          if (data) {
-            $("#stats").show();
-            $("#name").text(data.name);
-            $("#role").text(data.role);
-            $("#age").text(data.age);
-            $("#force-points").text(data.forcePoints);
-          } else {
-            $("#name").text(
-              "The force is not strong with this one. Your character was not found."
-            );
-            $("#stats").hide();
-          }
-        });
+          // Add the matchedCeleb's information: name, image, compatiability score
+          $("#matched-name-display").text(matchedCeleb.name);
+
+          $("#matched-photo-display").attr("src", matchedCeleb.photo);
+
+          $("#matched-photo-display").attr("alt", matchedCeleb.name);
+
+          $("#matched-info-display").append(lowestSum);
+        }
+
+        // Run RenderModal function, pass through matchedCelebFriend
+        renderModal(matchedCelebFriend);
       }
     });
   });
