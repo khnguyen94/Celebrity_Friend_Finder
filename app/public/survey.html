@@ -7,7 +7,6 @@
     <title>Document</title>
 
     <!-- Link CSS Reset -->
-    <link rel="stylesheet" href="../css/reset.css">
     <!-- Link JQuery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script
@@ -27,8 +26,14 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-    <!-- Link Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!-- Custom CSS -->
+    <style>
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        display: block;
+      }
+    </style>
   </head>
 
   <body>
@@ -257,7 +262,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <img id="matched-photo-display" src="" alt=""/>
+            <img id="matched-photo-display" src="" alt="" />
             <p id="matched-info-display">Compatibility Score:</p>
           </div>
           <div class="modal-footer">
@@ -501,7 +506,7 @@
 
         console.log("matchedCelebFriend");
         console.log(matchedCelebFriend);
-        console.log(matchedCelebFriend.photo);
+        // console.log(matchedCelebFriend.photo);
 
         // Create a new variable to hold matchedCelebFriend's name
         var matchCelebName;
