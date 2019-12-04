@@ -271,8 +271,8 @@
             .val()
             .trim();
 
-            // convert questionAnswer to integer
-            questionAnswer = parseInt(questionAnswer);
+          // convert questionAnswer to integer
+          questionAnswer = parseInt(questionAnswer);
 
           // Push value to the userScoresArr
           userSurveyAnswers.push(questionAnswer);
@@ -304,45 +304,21 @@
             );
           }
 
-          // Clear the form
+          // Clear the form after submitting
+          $("#userNameInput").val("");
+          $("#userImageEmailLinkInput").val("");
+          $("#userImageLinkInput").val("");
+          $("#q1").val("");
+          $("#q2").val("");
+          $("#q3").val("");
+          $("#q4").val("");
+          $("#q5").val("");
+          $("#q6").val("");
+          $("#q7").val("");
+          $("#q8").val("");
+          $("#q9").val("");
+          $("#q10").val("");
         });
-
-        // Create a function that which object in the differences arr has the lowest differences (best match), returns the match celeb
-        function getMatch(arr) {
-          // Create a variable that will hold the matched celeb
-          var matchedCeleb;
-
-          // Create an array that will hold just the differences in scores
-          var justDiffArr = [];
-
-          // Loop through the entire differences arr and push each differences into the justDiffArr
-          for (var i = 0; i < differences.length; i++) {
-            // Create a variable to hold difference value, assign it to the diff value at that difference index
-            var diffValue = differences[i].diff;
-
-            // Push diffValue to justDiffArr
-            justDiffArr.push(diffValue);
-          }
-
-          // Find the lowest difference value in justDiffArr
-          var lowestDiff = Math.min(...justDiffArr);
-
-          // Find the index of that lowest difference value, loop through the entire array of differences
-          for (var i = 0; i < differences.length; i++) {
-            if ((differences[i].diff = lowestDiff)) {
-              matchedCeleb = friends[i].routeName;
-            }
-          }
-
-          return matchedCeleb;
-        }
-
-        // Run getMatch function
-        getMatch(differences);
-
-        // Use that matchedCeleb's routeName to return to user the matchedCeleb's JSON
-
-        // Clear the form after submission
       }
     });
   });

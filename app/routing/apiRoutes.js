@@ -77,12 +77,80 @@ router.post("/api/friends", function(req, res) {
       // Push that diffArr to resultsArr
       resultsArr.push(diffArr);
     }
-  };
+  }
 
   // Run the calculateDifferences function, pass in all 3 arrays
   calculateDifferences(celebScoresArr, newFriendScoresArr, compatScoresArr);
 
+  console.log("compat arr");
+  console.log(compatScoresArr);
+
+  // Create a variable to hold all the sums of differences of each differenceArray
+  var sumDiffArr = [];
+
   // Create a function that will calculate the total sum of each difference array in compatScoresArr
+  function calculateSumOfArr(compatArrays, resultsArr) {
+    // Use a forloop to loop through every sub array in compatArrays
+    for (var i = 0; i < compatArrays.length; i++) {
+      // Create a variable to hold sum of the array
+      var arraySum = 0;
+
+      // Loop through each sub array and calculate the sum
+      for (var j = 0; j < compatArrays[i].length; j++) {
+        // Recursively add each value to arraySum
+        arraySum += parseInt(compatArrays[i][j]);
+      }
+
+      console.log(arraySum);
+
+      // Push arraySum into sumDiffArr
+      resultsArr.push(arraySum);
+    }
+  }
+
+  // Run the calculateSumDiff function and pass through compatScoresArr
+  calculateSumOfArr(compatScoresArr, sumDiffArr);
+
+  console.log("sumDiffArr");
+  console.log(sumDiffArr);
+
+  // Create a variable to hold lowest index
+  var lowestSumIndex;
+
+  // Create a function that gets the index of of the lowest difference in sumDiffArr
+  function getLowestIndex(sumArr) {
+    // Find the lowest num and assign it to lowestNum
+    lowestSum = Math.min(...sumArr);
+
+    console.log(lowestSum);
+
+    // Assign the index of the lowest value number in the array to lowestIndex
+    lowestSumIndex = sumArr.indexOf(lowestSum);
+  }
+
+  // Run the getLowestIndex, pass through sumDiffArr
+  getLowestIndex(sumDiffArr);
+
+  console.log("lowestSumIndex");
+  console.log(lowestSumIndex);
+
+  // Create a variable to hold the match celeb friend
+  var matchedCelebFriend;
+
+  // Create a function that returns the celeb object at the index to be sent back to the user for processing
+  function findMatchedCeleb(indexNum) {
+    // Access friends and assign matchedCelebFriend to the celeb at that index
+    matchedCelebFriend = friends[indexNum];
+  }
+
+  // Run findMatchedCeleb, pass through lowestSumIndex
+  findMatchedCeleb(lowestSumIndex);
+
+  console.log("matchedCelebFriend");
+  console.log(matchedCelebFriend);
+
+  // 
+  res.json(matchedCelebFriend);
 
 });
 
