@@ -217,6 +217,39 @@
       </div>
     </div>
 
+    <!-- Modal -->
+    <div id="modal-div">
+      <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">You've Matched with A Celeb! - <span id="matched-name-display"></span></h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p id="matched-info-display"></p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Link JQuery -->
     <script src="https://code.jquery.com/jquery.js"></script>
   </body>
@@ -227,9 +260,6 @@
   // Create an array to hold all celebs
   var celebArr = [];
 
-  // Create an array to hold all the compatibility arrays
-  var compatibilityArr = [];
-
   // When the html document is fully loaded run a anon function for the JS
   $(document).ready(function() {
     // Use and ajax command to call on all the celebs
@@ -239,10 +269,10 @@
     }).then(function(data) {
       console.log(data);
       // Assign the data to the celebs array
-      celebArr.push(data);
+      celebArr = data;
     });
 
-    // console.log(celebArr);
+    console.log(celebArr);
 
     // Create on-click logic for submit button
     $("#submit-survey-button").on("click", function(event) {
@@ -296,11 +326,10 @@
         // Data is a variable that the callback function should receive form the server, it is the match celeb friend
         $.post("/api/friends", newFriend, function(data) {
           if (data) {
-            console.log("The match is: " + data);
-            // Create a function that renders a modale
+            console.log("The user has been posted");
           } else {
             alert(
-              "Sorry, there was an issue matching you with a celeb. Please reload and try again!"
+              "Sorry, there was an issue adding your survey. Please reload and try again!"
             );
           }
 
@@ -318,6 +347,162 @@
           $("#q8").val("");
           $("#q9").val("");
           $("#q10").val("");
+        });
+
+        // Matching Logic Here
+        // Create a variable to hold the array of celebrity scores
+        var celebScoresArr = [];
+
+        // Create a variable to hold the single array of the newFriend's scores
+        var newFriendScoresArr = [];
+
+        // Create a variable to hold the array of combatibility scores (post calculations with the newFriend's data)
+        var compatScoresArr = [];
+
+        // Pull all the scores data from friends and push to the celebScoresArr, use a for loop
+        for (var i = 0; i < celebArr.length - 1; i++) {
+          // Create individual array to hold the i'th celeb's scores
+          celebScore = [];
+
+          // Assign the new individual array to the the one at the i'th count
+          celebScore = celebArr[i].scores;
+
+          // Push the new individual array into celebScoresArr
+          celebScoresArr.push(celebScore);
+        }
+
+        // Pull the newFriend's scores into the newFriendScoresArr
+        newFriendScoresArr = newFriend.scores;
+
+        console.log("celebs ");
+        console.log(celebScoresArr);
+
+        console.log("new friend ");
+        console.log(newFriendScoresArr);
+
+        // Create a function that calculates all the differences in scores between celebScoresArr and  newFriendScoresArr
+        // Push all the new arrays to compatScoresArr
+        function calculateDifferences(celebArr, friendArr, resultsArr) {
+          // Loop through each celeb scores array and calculate the difference between that array and the friend's score array
+          for (var i = 0; i < celebArr.length; i++) {
+            // Create an empty array to hold the difference of the i'th celeb scores and the friend's scores
+            var diffArr = [];
+
+            // Create a nested for loop to loop through each number of the i'th celeb's scores
+            for (var j = 0; j < celebArr[i].length; j++) {
+              // Create a variable to hold the difference number
+              var diffNum;
+
+              // Calculat the difference between the two numbers at the matching j'th index
+              diffNum = celebArr[i][j] - parseInt(friendArr[j]);
+
+              // Calculate the difference
+              diffNum = Math.abs(diffNum);
+
+              // Push that difference to the diffArr
+              diffArr.push(diffNum);
+            }
+            // Push that diffArr to resultsArr
+            resultsArr.push(diffArr);
+          }
+        }
+
+        // Run the calculateDifferences function, pass in all 3 arrays
+        calculateDifferences(
+          celebScoresArr,
+          newFriendScoresArr,
+          compatScoresArr
+        );
+
+        console.log("compat arr");
+        console.log(compatScoresArr);
+
+        // Create a variable to hold all the sums of differences of each differenceArray
+        var sumDiffArr = [];
+
+        // Create a function that will calculate the total sum of each difference array in compatScoresArr
+        function calculateSumOfArr(compatArrays, resultsArr) {
+          // Use a forloop to loop through every sub array in compatArrays
+          for (var i = 0; i < compatArrays.length; i++) {
+            // Create a variable to hold sum of the array
+            var arraySum = 0;
+
+            // Loop through each sub array and calculate the sum
+            for (var j = 0; j < compatArrays[i].length; j++) {
+              // Recursively add each value to arraySum
+              arraySum += parseInt(compatArrays[i][j]);
+            }
+
+            // Push arraySum into sumDiffArr
+            resultsArr.push(arraySum);
+          }
+        }
+
+        // Run the calculateSumDiff function and pass through compatScoresArr
+        calculateSumOfArr(compatScoresArr, sumDiffArr);
+
+        console.log("sumDiffArr");
+        console.log(sumDiffArr);
+
+        // Create a variable to hold lowest index
+        var lowestSumIndex;
+
+        // Create a function that gets the index of of the lowest difference in sumDiffArr
+        function getLowestIndex(sumArr) {
+          // Find the lowest num and assign it to lowestNum
+          lowestSum = Math.min(...sumArr);
+
+          console.log(lowestSum);
+
+          // Assign the index of the lowest value number in the array to lowestIndex
+          lowestSumIndex = sumArr.indexOf(lowestSum);
+        }
+
+        // Run the getLowestIndex, pass through sumDiffArr
+        getLowestIndex(sumDiffArr);
+
+        console.log("lowestSumIndex");
+        console.log(lowestSumIndex);
+
+        // Create a variable to hold the match celeb friend
+        var matchedCelebFriend;
+
+        // Create a function that returns the celeb object at the index to be sent back to the user for processing
+        function findMatchedCeleb(indexNum) {
+          // Access friends and assign matchedCelebFriend to the celeb at that index
+          matchedCelebFriend = celebArr[indexNum];
+        }
+
+        // Run findMatchedCeleb, pass through lowestSumIndex
+        findMatchedCeleb(lowestSumIndex);
+
+        console.log("matchedCelebFriend");
+        console.log(matchedCelebFriend);
+
+        // Create a new variable to hold matchedCelebFriend's name
+        var matchCelebName;
+
+        // Set it
+        matchCelebName = matchedCelebFriend.routeName;
+
+        console.log(matchCelebName);
+
+        // Render the modal with all the information
+
+        $.get("/api/characters/" + searchedCharacter, function(data) {
+          console.log(data);
+          if (data) {
+            $("#stats").show();
+            $("#name").text(data.name);
+            $("#role").text(data.role);
+            $("#age").text(data.age);
+            $("#force-points").text(data.forcePoints);
+          } else {
+            $("#name").text(
+              "The force is not strong with this one. Your character was not found."
+            );
+            $("#stats").hide();
+          }
         });
       }
     });
