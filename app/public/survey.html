@@ -283,7 +283,7 @@
 <!-- JS logic to handle submit data -->
 <script type="text/javascript">
   // Create an array to hold all celebs
-  var celebArr = [];
+  var celebArr = {};
 
   // When the html document is fully loaded run a anon function for the JS
   $(document).ready(function() {
@@ -295,9 +295,9 @@
       // console.log(data);
       // Assign the data to the celebs array
       celebArr = data;
-    });
 
-    console.log(celebArr);
+      console.log(celebArr);
+    });
 
     // Create on-click logic for submit button
     $("#submit-survey-button").on("click", function(event) {
@@ -334,7 +334,7 @@
         }
 
         // Check both score
-        // console.log(userSurveyAnswers);
+        console.log(userSurveyAnswers);
 
         // Grab the rest of the form elements to be used in creating a new user
         var newFriend = {
